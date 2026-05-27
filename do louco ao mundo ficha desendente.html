@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Ficha RPG - v2</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        h2 {
+            color: #653f87;
+            border-bottom: 2px solid #5a1696;
+            padding-bottom: 8px;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        h3 {
+            color: #888;
+            font-size: 1em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.85em;
+            color: #bbb;
+            margin-bottom: 5px;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #444;
+            background: #2a2a2a;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+
+        input:focus {
+            border-color: #5a1696;
+            outline: none;
+            background: #333;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            background: #524861;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background: #524861;
+            transform: translateY(-2px);
+        }
+
+        button.skip {
+            background: #555;
+        }
+
+        button.skip:hover {
+            background: #666;
+        }
+
+        /* Ficha Final */
+        #ficha-final {
+            line-height: 1.8;
+            font-family: 'Courier New', Courier, monospace;
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #5a1696;
+        }
+
+        .divider {
+            border-top: 1px solid #444;
+            margin: 15px 0;
+        }
+
+        .red {
+            color: #ff5252;
+        }
+
+        .yellow {
+            color: #ffd740;
+        }
+
+        .blue {
+            color: #40c4ff;
+        }
+
+        .bold {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="step active" id="step1">
+            <h2>Valores Iniciais</h2>
+            <h3>Atributos Base e Nível</h3>
+            <div class="grid">
+                <div class="field"><label>Corpo Inicial</label><input type="number" id="crp" value="0"></div>
+                <div class="field"><label>Mente Inicial</label><input type="number" id="mnt" value="0"></div>
+                <div class="field"><label>Espírito Inicial</label><input type="number" id="esp" value="0"></div>
+                <div class="field"><label>Nível</label><input type="number" id="lvl" value="1"></div>
+            </div>
+            <button onclick="nextStep(2)">Confirmar Atributos</button>
+        </div>
+
+        <div class="step" id="step2">
+            <h2>Valores Atuais</h2>
+            <h3>Estado presente do personagem</h3>
+            <div class="grid">
+                <div class="field"><label>Corpo Atual</label><input type="number" id="crp_a" value="0"></div>
+                <div class="field"><label>Mente Atual</label><input type="number" id="mnt_a" value="0"></div>
+                <div class="field"><label>Espírito Atual</label><input type="number" id="esp_a" value="0"></div>
+            </div>
+            <button onclick="nextStep(3)">Definir Perícias de Corpo</button>
+        </div>
+
+        <div class="step" id="step3">
+            <h2>Perícias: Corpo</h2>
+            <div class="grid">
+                <div class="field"><label>Combate</label><input type="number" id="p_com" value="0"></div>
+                <div class="field"><label>Atletismo</label><input type="number" id="p_atl" value="0"></div>
+                <div class="field"><label>Reflexo</label><input type="number" id="p_ref" value="0"></div>
+                <div class="field"><label>Resistência</label><input type="number" id="p_res" value="0"></div>
+                <div class="field"><label>Instintos</label><input type="number" id="p_ins" value="0"></div>
+                <div class="field"><label>Furtividade</label><input type="number" id="p_fur" value="0"></div>
+            </div>
+            <button onclick="nextStep(4)">Definir Perícias de Mente</button>
+        </div>
+
+        <div class="step" id="step4">
+            <h2>Perícias: Mente</h2>
+            <div class="grid">
+                <div class="field"><label>Pontaria</label><input type="number" id="p_pon" value="0"></div>
+                <div class="field"><label>Investigação</label><input type="number" id="p_inv" value="0"></div>
+                <div class="field"><label>Percepção</label><input type="number" id="p_per" value="0"></div>
+                <div class="field"><label>Conhecimento</label><input type="number" id="p_con" value="0"></div>
+                <div class="field"><label>Artes</label><input type="number" id="p_art" value="0"></div>
+                <div class="field"><label>Medicina</label><input type="number" id="p_meda" value="0"></div>
+            </div>
+            <button onclick="nextStep(5)">Definir Perícias de Espírito</button>
+        </div>
+
+        <div class="step" id="step5">
+            <h2>Perícias: Espírito</h2>
+            <div class="grid">
+                <div class="field"><label>Meditação</label><input type="number" id="p_medo" value="0"></div>
+                <div class="field"><label>Empatia</label><input type="number" id="p_emp" value="0"></div>
+                <div class="field"><label>Ocultismo</label><input type="number" id="p_ocu" value="0"></div>
+                <div class="field"><label>Carisma</label><input type="number" id="p_car" value="0"></div>
+                <div class="field"><label>Intimidação</label><input type="number" id="p_int" value="0"></div>
+                <div class="field"><label>Oração</label><input type="number" id="p_ora" value="0"></div>
+            </div>
+            <button onclick="nextStep(6)">Configurar Equipamento</button>
+        </div>
+
+        <div class="step" id="step6">
+            <h2>Defesas e Armadura</h2>
+            <h3>O personagem usa armadura?</h3>
+            <div class="grid">
+                <div class="field"><label>Defesa Física Armadura</label><input type="number" id="arm_fis" value="0">
+                </div>
+                <div class="field"><label>Esquiva Armadura</label><input type="number" id="arm_esq" value="0"></div>
+                <div class="field"><label>Defesa Mágica Armadura</label><input type="number" id="arm_mag" value="0">
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="skip" onclick="zerarArmadura()">Não usa Armadura</button>
+                <button onclick="nextStep(7)">Confirmar Armadura</button>
+            </div>
+        </div>
+
+        <div class="step" id="step7">
+            <h2>Espaços de Favor</h2>
+            <h3>Deseja calcular os espaços de favor divinos?</h3>
+            <p style="font-size: 0.9em; color: #888;">Baseado na perícia Oração.</p>
+            <div class="btn-group">
+                <button class="skip" onclick="gerarFicha(false)">Não calcular</button>
+                <button onclick="gerarFicha(true)">Sim, Calcular Favores</button>
+            </div>
+        </div>
+
+        <div class="step" id="stepFinal">
+            <h2>Ficha Finalizada</h2>
+            <div id="ficha-final"></div>
+            <button style="margin-top:20px; background: #c62828;" onclick="location.reload()">Resetar
+                Calculadora</button>
+        </div>
+    </div>
+
+    <script>
+        function nextStep(n) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + n).classList.add('active');
+        }
+
+        function zerarArmadura() {
+            document.getElementById('arm_fis').value = 0;
+            document.getElementById('arm_esq').value = 0;
+            document.getElementById('arm_mag').value = 0;
+            nextStep(7);
+        }
+
+        function gerarFicha(calcularFavores) {
+            const get = (id) => parseInt(document.getElementById(id).value) || 0;
+
+            // Atributos e Nível
+            const crp = get('crp'), mnt = get('mnt'), esp = get('esp'), lvl = get('lvl');
+            const crp_a = get('crp_a'), mnt_a = get('mnt_a'), esp_a = get('esp_a');
+
+            // Derivados
+
+            const vd = (crp + 1) * 6 + 12 + (lvl - 1) * ((crp + 1) + 5);
+            const san = mnt * 6 + 5 + (lvl - 1) * (mnt + 3);
+            const alm = esp * 6 + 10 + (lvl - 1) * (esp + 6);
+
+            const ttl_crp = 1 + Math.floor((lvl - 1) / 4);
+
+            const at_crp = Math.floor((Math.floor(lvl / 2) + crp_a + ttl_crp) / 2);
+            const at_mnt = Math.floor((Math.floor(lvl / 2) + mnt_a) / 2);
+            const at_esp = Math.floor((Math.floor(lvl / 2) + esp_a) / 2);
+
+            // Perícias Totais
+            const bonus_defs = Math.floor(lvl / 5);
+
+            const t_res = at_crp + get('p_res') + bonus_defs;
+            const t_per = at_mnt + get('p_per');
+            const t_ocu = at_esp + get('p_ocu');
+            const t_ref = at_crp + get('p_ref') + bonus_defs;
+            const t_ora = at_esp + get('p_ora');
+            const p_atl = get('p_atl');
+
+            // Defesas e Movimento
+            const bonus_mov = get('p_atl') >= 2 ? 3 : 0;
+            const dff = t_res + lvl + 5 + get('arm_fis');
+            const dfme = t_per + lvl + 5;
+            const dfma = t_ocu + lvl + 5 + get('arm_mag');
+            const eqv = t_ref + lvl + 10 + get('arm_esq');
+            const mov = (crp + 1) + 4 + lvl - 1 + bonus_mov;
+
+            // Construção do Texto da Ficha
+            let out = `
+            <div><span class="bold">NÍVEL:</span> ${lvl}</div>
+            <div><span class="bold">CORPO:</span> ${crp_a + ttl_crp} | <span class="bold">MENTE:</span> ${mnt_a} | <span class="bold">ESPÍRITO:</span> ${esp_a}</div>
+            <div class="divider"></div>
+            <div class="red"><span class="bold">VIDA:</span> ${vd}</div>
+            <div class="yellow"><span class="bold">SANIDADE:</span> ${san}</div>
+            <div class="blue"><span class="bold">ALMA:</span> ${alm}</div>
+            <div class="divider"></div>
+            <div>Defesa Física: ${dff}</div>
+            <div>Defesa Mental: ${dfme}</div>
+            <div>Defesa Mágica: ${dfma}</div>
+            <div>Esquiva: ${eqv}</div>
+            <div>Movimentação: ${mov}</div>
+            <div class="divider"></div>
+            <div><span class="bold">BASE CORPO (${at_crp}):</span> Combate: ${at_crp + get('p_com')}, Atletismo: ${at_crp + p_atl}, Reflexo: ${t_ref}, Resistência: ${t_res}, Instintos: ${at_crp + get('p_ins')}, Furtividade: ${at_crp + get('p_fur')}</div>
+            <div class="divider"></div>
+            <div><span class="bold">BASE MENTE (${at_mnt}):</span> Pontaria: ${at_mnt + get('p_pon')}, Investigação: ${at_mnt + get('p_inv')}, Percepção: ${t_per}, Conhecimento: ${at_mnt + get('p_con')}, Artes: ${at_mnt + get('p_art')}, Medicina: ${at_mnt + get('p_meda')}</div>
+            <div class="divider"></div>
+            <div><span class="bold">BASE ESPÍRITO (${at_esp}):</span> Meditação: ${at_esp + get('p_medo')}, Empatia: ${at_esp + get('p_emp')}, Ocultismo: ${t_ocu}, Carisma: ${at_esp + get('p_car')}, Intimidação: ${at_esp + get('p_int')}, Oração: ${t_ora}</div>
+        `;
+
+            if (calcularFavores) {
+                out += `
+                <div class="divider"></div>
+                <div class="yellow"><span class="bold">--- ESPAÇOS DE FAVOR ---</span></div>
+                <div>1º Círculo: ${Math.floor(t_ora / 3)}</div>
+                <div>2º Círculo: ${Math.floor(t_ora / 7)}</div>
+                <div>3º Círculo: ${Math.floor(t_ora / 15)}</div>
+                <div>4º Círculo: ${Math.floor(t_ora / 20)}</div>
+            `;
+            }
+
+            document.getElementById('ficha-final').innerHTML = out;
+            nextStep('Final');
+        }
+    </script>
+
+</body>
+
+</html>
